@@ -72,4 +72,4 @@ console.log(`${messages.length} berichten, ${invoices.length} factuur-kandidaten
 const okLeads = await post(leadUrl, { secret, messages }, "Leads:");
 let okInv = true;
 if (invoiceUrl && invoices.length) okInv = await post(invoiceUrl, { secret, invoices }, "Facturen:");
-if (!okLeads || !okInv)
+if (!okLeads || !okInv) process.exit(1);

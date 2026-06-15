@@ -33,10 +33,11 @@ try {
     const fromName = parsed.from?.value?.[0]?.name || "";
     const fromAddr = parsed.from?.value?.[0]?.address || "";
     const text = (parsed.text || "").trim();
+    const html = (parsed.html || "").slice(0, 30000);
     const messageId = parsed.messageId || `uid-${uid}`;
     const date = (parsed.date || new Date()).toISOString();
 
-    messages.push({ subject, fromName, fromAddr, text, messageId, date });
+    messages.push({ subject, fromName, fromAddr, text, html, messageId, date });
 
     const pdfAtts = (parsed.attachments || []).filter(
       (a) => (a.contentType || "").includes("pdf") || (a.filename || "").toLowerCase().endsWith(".pdf")
@@ -71,4 +72,4 @@ console.log(`${messages.length} berichten, ${invoices.length} factuur-kandidaten
 const okLeads = await post(leadUrl, { secret, messages }, "Leads:");
 let okInv = true;
 if (invoiceUrl && invoices.length) okInv = await post(invoiceUrl, { secret, invoices }, "Facturen:");
-if (!okLeads || !okInv) process.exit(1);
+if (!okLeads || !okInv)

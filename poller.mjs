@@ -38,11 +38,14 @@ try {
 
     messages.push({ subject, fromName, fromAddr, text, messageId, date });
 
-    if (subject.toLowerCase().includes("factuur")) {
+    const pdfAtts = (parsed.attachments || []).filter(
+      (a) => (a.contentType || "").includes("pdf") || (a.filename || "").toLowerCase().endsWith(".pdf")
+    );
+    const isInvoiceCandidate = pdfAtts.length > 0 || /factuur|rekening|pakbon|invoice|debnr|debiteur/.test(subject.toLowerCase());
+    if (isInvoiceCandidate) {
       let pdfText = "";
-      for (const att of parsed.attachments || []) {
-        const isPdf = (att.contentType || "").includes("pdf") || (att.filename || "").toLowerCase().endsWith(".pdf");
-        if (isPdf && att.content) {
+      for (const att of pdfAtts) {
+        if (att.content) {
           try { const r = await pdfParse(att.content); pdfText += "\n" + (r.text || ""); } catch { /* skip */ }
         }
       }

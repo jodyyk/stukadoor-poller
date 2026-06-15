@@ -23,3 +23,4 @@ jobs:
           LEAD_LOOKBACK_DAYS: ${{ secrets.LEAD_LOOKBACK_DAYS }}
           INGEST_SECRET: ${{ secrets.INGEST_SECRET }}
           INGEST_URL: ${{ secrets.INGEST_URL }}
+          INGEST_INVOICE_URL: ${{ secrets.INGEST_INVOICE_URL }}

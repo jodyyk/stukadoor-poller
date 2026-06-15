@@ -1,0 +1,25 @@
+name: Stukadoor lead-poller
+
+on:
+  schedule:
+    - cron: "*/15 * * * *"
+  workflow_dispatch: {}
+
+jobs:
+  poll:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - run: npm install --no-audit --no-fund
+      - run: node poller.mjs
+        env:
+          IMAP_HOST: ${{ secrets.IMAP_HOST }}
+          IMAP_PORT: ${{ secrets.IMAP_PORT }}
+          IMAP_USER: ${{ secrets.IMAP_USER }}
+          IMAP_PASSWORD: ${{ secrets.IMAP_PASSWORD }}
+          LEAD_LOOKBACK_DAYS: ${{ secrets.LEAD_LOOKBACK_DAYS }}
+          INGEST_SECRET: ${{ secrets.INGEST_SECRET }}
+          INGEST_URL: ${{ secrets.INGEST_URL }}

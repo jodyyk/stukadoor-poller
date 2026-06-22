@@ -3,7 +3,12 @@ name: Stukadoor lead-poller
 on:
   schedule:
     - cron: "*/15 * * * *"
-  workflow_dispatch: {}
+  workflow_dispatch:
+    inputs:
+      lookback_days:
+        description: "Aantal dagen terugkijken (voor handmatig backfillen, bv. 30)"
+        required: false
+        default: "30"
 
 jobs:
   poll:
@@ -20,7 +25,7 @@ jobs:
           IMAP_PORT: ${{ secrets.IMAP_PORT }}
           IMAP_USER: ${{ secrets.IMAP_USER }}
           IMAP_PASSWORD: ${{ secrets.IMAP_PASSWORD }}
-          LEAD_LOOKBACK_DAYS: ${{ secrets.LEAD_LOOKBACK_DAYS }}
+          LEAD_LOOKBACK_DAYS: ${{ github.event.inputs.lookback_days || secrets.LEAD_LOOKBACK_DAYS }}
           INGEST_SECRET: ${{ secrets.INGEST_SECRET }}
           INGEST_URL: ${{ secrets.INGEST_URL }}
           INGEST_INVOICE_URL: ${{ secrets.INGEST_INVOICE_URL }}
